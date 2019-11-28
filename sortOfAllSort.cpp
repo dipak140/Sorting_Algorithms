@@ -11,6 +11,55 @@ void swap(int *a, int *b){
 	*a = *b;
 	*b = temp;
 }
+void merge(int *a, int s, int e){
+	int mid = (s+e)/2;
+	int i = s;
+	int j = mid+1;
+	int k = s;
+	
+	int temp[100];
+	
+	while(i <= mid && j<=e){
+		if(a[i] < a[j]){
+			temp[k++] = a[i++];
+		}
+		else{
+			temp[k++] = a[j++];
+		}
+	}
+	while(i<=mid){
+		temp[k++] = a[i++];
+	}
+	
+	while(j<=e){
+		temp[k++] = a[j++];
+	}
+	
+	//copy the elements in a original array
+	for(int i = s ;i<=e; i++){
+		a[i] = temp[i];
+	}
+}
+	
+void mergeSort(int a[], int s, int e){
+	// start with a base case
+	if(s>=e){
+		return;
+	}
+	
+	//follow the three steps
+	//Divide - Sort - Merge
+	
+	int mid = (s+e)/2;
+	
+	//recursively the arrays - s to mid and mid+1 to e
+	
+	mergeSort(a,s,mid);
+	mergeSort(a,mid+1,e);
+	//merge the two parts
+	
+	merge(a,s,e);
+}
 void bubbleSort(int A[],int n){
 	for(int k = 1; k < n; k++){
 		int flag = 0;
@@ -102,5 +151,11 @@ int main(){
 	auto duration1 = duration_cast<microseconds>(stop2 - start2);	
 	cout<<"The time for Bubble Sort " << duration1.count()<<" microseconds\n";
 	
+	auto start2 = high_resolution_clock::now();
+	mergeSort(A,0,n-1);
+	auto stop2 = high_resolution_clock::now();	
+	auto duration1 = duration_cast<microseconds>(stop2 - start2);	
+	cout<<"The time for merge Sort " << duration1.count()<<" microseconds\n";
+
 	return 0;
 } 
