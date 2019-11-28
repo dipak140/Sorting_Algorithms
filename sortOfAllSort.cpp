@@ -11,6 +11,26 @@ void swap(int *a, int *b){
 	*a = *b;
 	*b = temp;
 }
+void bubbleSort(int A[],int n){
+	for(int k = 1; k < n; k++){
+		int flag = 0;
+		for(int i=0;i<n-k;i++){
+			if(A[i] > A[i+1]){
+				int temp;
+				temp  = A[i];
+				A[i] = A[i+1];
+				A[i+1] = temp;
+				flag = 1;
+			}
+		if(flag == 0){
+			break;
+		}
+		}	
+	}
+	for(int i=0;i<n;i++){
+		cout<<A[i]<<" ";
+	}
+}
 void selectionSort(int A[],int n)
 {	
 	for(int i= 0;i<n-1;i++){
@@ -75,5 +95,12 @@ int main(){
 	auto stop1 = high_resolution_clock::now();	
 	auto duration1 = duration_cast<microseconds>(stop1 - start1);	
 	cout<<"The time for Insertion Sort " << duration1.count()<<" microseconds\n";
+	
+	auto start2 = high_resolution_clock::now();
+	bubbleSort(A,n);
+	auto stop2 = high_resolution_clock::now();	
+	auto duration1 = duration_cast<microseconds>(stop2 - start2);	
+	cout<<"The time for Bubble Sort " << duration1.count()<<" microseconds\n";
+	
 	return 0;
 } 
