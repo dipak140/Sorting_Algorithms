@@ -3,3 +3,4 @@ This repository aims to combine all(eventually) sorting algorithms into one piec
 To begin with, the following sorting algorithms have already been added, and more can be added.
 1. Selection Sort
 2. Insertion Sort
+3. Merge Sort
