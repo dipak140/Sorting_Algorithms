@@ -4,3 +4,4 @@ To begin with, the following sorting algorithms have already been added, and mor
 1. Selection Sort
 2. Insertion Sort
 3. Merge Sort
+4. Bubble Sort
