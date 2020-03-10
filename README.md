@@ -5,3 +5,4 @@ To begin with, the following sorting algorithms have already been added, and mor
 2. Insertion Sort
 3. Merge Sort
 4. Bubble Sort
+5. Quick Sort
