@@ -64,6 +64,36 @@ void insertionSort(int A[], int n){
 	}
 }
 
+int partition(int *arr, int begin, int end) {
+	int pivot = arr[end];
+	int index = begin;
+	int temp;
+	
+	for(int i = begin; i < end; i++) {
+		if(arr[i] <= pivot) {
+			temp = arr[i];
+			arr[i] = arr[index];
+			arr[index] = temp;
+			index++;
+		}
+	}
+	
+	temp = arr[end];
+	arr[end] = arr[index];
+	arr[index] = temp;
+
+	return index;
+}
+
+void quickSort(int *arr, int begin, int end) {
+	int index;
+	if(begin < end) {
+		index = partition(arr, begin, end);
+		quickSort(arr, begin, index-1);
+		quickSort(arr, index+1, end);
+	}
+}
+
 void randomize(int arr[], int n){
 	srand(time(NULL));
 	for(int i=n-1;i>0;i--){
@@ -76,10 +106,14 @@ int main(){
 	int n;
 	cin>>n;
 	int A[n];
+	int quickArr[n];
 	for(int i=0;i<n;i++){
 		cin>>A[i];
 	}
-	
+	for(int i = 0; i < n; i++) {
+		quickArr[i] = A[i];
+	}
+
 	auto start = high_resolution_clock::now();
 	selectionSort(A,n);
 	auto stop = high_resolution_clock::now();
@@ -99,8 +133,20 @@ int main(){
 	auto start2 = high_resolution_clock::now();
 	bubbleSort(A,n);
 	auto stop2 = high_resolution_clock::now();	
-	auto duration1 = duration_cast<microseconds>(stop2 - start2);	
-	cout<<"The time for Bubble Sort " << duration1.count()<<" microseconds\n";
+	auto duration2 = duration_cast<microseconds>(stop2 - start2);	
+	cout<<"The time for Bubble Sort " << duration2.count()<<" microseconds\n";
+
+	auto start3 = high_resolution_clock::now();
+	quickSort(quickArr,0,n-1);
+	auto stop3 = high_resolution_clock::now();
+	auto duration3 = duration_cast<microseconds>(stop3 - start3);
+	for(int i = 0; i < n; i++) {
+		cout << quickArr[i] << " ";
+		if(i == n-1) {
+			cout << "The time for Quick Sort " << duration3.count();
+			cout << " microseconds\n";
+		}
+	}
 	
 	return 0;
 } 
