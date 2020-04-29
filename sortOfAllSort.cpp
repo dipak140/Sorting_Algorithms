@@ -94,6 +94,41 @@ void quickSort(int *arr, int begin, int end) {
 	}
 }
 
+void makeHeap(int arr[], int n, int i) {
+	int largest = i;
+	int left = 2*i + 1;
+	int right = 2*i + 2;
+
+	if(left < n && arr[left] > arr[largest]) {
+		largest = left;
+	}
+
+	if(right < n && arr[right] > arr[largest]) {
+		largest = right;
+	}
+
+	if(largest != i) {
+		swap(arr[i], arr[largest]);
+		makeHeap(arr, n, largest);
+	}
+}
+
+void heapSort(int arr[], int n) {
+	
+	for(int i = n/2 - 1; i >= 0; i--) {
+		makeHeap(arr, n, i);
+	}
+	for(int i = n-1; i > 0; i--) {
+		swap(arr[0], arr[i]);
+		makeHeap(arr, i, 0);
+	}
+	for(int i = 0; i < n; i++) {
+		cout << arr[i] << " ";
+	}
+
+
+}
+
 void randomize(int arr[], int n){
 	srand(time(NULL));
 	for(int i=n-1;i>0;i--){
@@ -147,6 +182,12 @@ int main(){
 			cout << " microseconds\n";
 		}
 	}
+
+	auto start4 = high_resolution_clock::now();
+	heapSort(A, n);
+	auto stop4 = high_resolution_clock::now();
+	auto duration4 = duration_cast<microseconds>(stop4-start4);
+	cout<<"The time for Heap Sort " << duration4.count() << " microseconds\n";
 	
 	return 0;
 } 
