@@ -1,152 +1,185 @@
-#include<iostream>
-#include<bits/stdc++.h>
-#include<time.h>
-#include<chrono>
-
+#include <iostream>
+#include <bits/stdc++.h>
+#include <time.h>
+#include <chrono>
 using namespace std;
 using namespace std::chrono;
 
-void swap(int *a, int *b){
+// Prints array upto (n - 1) index.
+void print(int A[], int n) { 
+	for(int i = 0; i < n; i++) {
+		cout << A[i] << " ";
+	}
+
+	cout << endl;
+}
+
+// Swap's value of two integer pointers.
+void swap(int *a, int *b) {
 	int temp = *a;
 	*a = *b;
 	*b = temp;
 }
-void bubbleSort(int A[],int n){
-	for(int k = 1; k < n; k++){
+
+// Loops n times and compares adjacent elements.
+// If the comparison has a higher value on left, a swap is performed.
+void bubbleSort(int A[],int n) {
+	// Loop n times
+	for(int k = 1; k < n; k++) {
+		// Flag tracks if no swaps are made in the upcoming loop
 		int flag = 0;
-		for(int i=0;i<n-k;i++){
-			if(A[i] > A[i+1]){
-				int temp;
-				temp  = A[i];
-				A[i] = A[i+1];
-				A[i+1] = temp;
-				flag = 1;
+
+		for(int i = 0; i < n - k; i++) {
+			// Swap if comparison is unordered
+			if(A[i] > A[i + 1]) {
+				swap(&A[i], &A[i + 1]);
+				// Swap done, so mark flag 
+				flag = true;
 			}
-		if(flag == 0){
-			break;
-		}
+
+			// Flag of 0 means no swaps, which means list is already sorted
+			if(flag == 0) {
+				break;
+			}
 		}	
 	}
-	for(int i=0;i<n;i++){
-		cout<<A[i]<<" ";
-	}
+
+	// Print sorted array
+	print(A, n);
 }
-void selectionSort(int A[],int n)
-{	
-	for(int i= 0;i<n-1;i++){
-		int min = i;
-		for(int j = i+1 ; j <n ; j++){
-			if(A[j] < A[min]){
-				min = j;
+
+// Loops n times and moves smallest value to the beginning (of unsorted part).
+// Challenge: Add a flag that accomplishes the same goal as in bubbleSort
+void selectionSort(int A[],int n) {	
+	for(int i = 0; i < n - 1; i++) {
+		// Holds the index of the minimum value
+		int min_index = i;
+
+		// Loops through unsorted part and update min_index
+		for(int j = i + 1; j < n; j++) {
+			if(A[j] < A[min_index]) {
+				min_index = j;
 			}
 		}
-		swap(&A[i], &A[min]);
+
+		// Loop is done, so swap the min_index value with the one at the start (of the unsorted part)
+		swap(&A[i], &A[min_index]);
 	}	
-		for(int i=0;i<n;i++){
-		cout<<A[i]<<" ";
-	}
-	cout<<endl;
+	
+	// Print sorted array
+	print(A, n);
 }
 
-void insertionSort(int A[], int n){
-	for(int i= 1 ;i<n;i++){
-		for(int j = i;j!=0;j--){
-			if(A[j]<A[j-1]){
-				int temp;
-				temp  = A[j];
-				A[j] = A[j-1];
-				A[j-1] = temp;
+// Loops n times and moves current loop-iteration's value down to the correct location.
+void insertionSort(int A[], int n) {
+	for(int i = 1; i < n; i++) {
+		// Move the current value through sorted values into correct location.
+		for(int j = i; j != 0; j--) {
+			// Sorted value is higher than selected value, so swap
+			if(A[j] < A[j - 1]) {
+				swap(&A[j], &A[j - 1]);
+			}
+			// Since sorted value is lower (or equal), break because correct location reached.
+			else {
+				break;
 			}
 		}
 	}
-	for(int i=0;i<n;i++){
-		cout<<A[i]<<" ";
-	}
+
+	// Print sorted array
+	print(A, n);
 }
 
-int partition(int *arr, int begin, int end) {
-	int pivot = arr[end];
+
+int partition(int A[], int begin, int end) {
+	int pivot = A[end];
 	int index = begin;
-	int temp;
 	
 	for(int i = begin; i < end; i++) {
-		if(arr[i] <= pivot) {
-			temp = arr[i];
-			arr[i] = arr[index];
-			arr[index] = temp;
+		if(A[i] <= pivot) {
+			swap(&A[i], &A[index]);
 			index++;
 		}
 	}
 	
-	temp = arr[end];
-	arr[end] = arr[index];
-	arr[index] = temp;
+	swap(&A[end], &A[index]);
 
 	return index;
 }
 
+// Paritions array into two based off of a pivot index. One holds values less than pivot,
+// the other holds values higher than pivot. Then recursively sorts the two arrays.
 void quickSort(int *arr, int begin, int end) {
 	int index;
+
 	if(begin < end) {
 		index = partition(arr, begin, end);
-		quickSort(arr, begin, index-1);
-		quickSort(arr, index+1, end);
+		quickSort(arr, begin, index - 1);
+		quickSort(arr, index + 1, end);
 	}
 }
 
-void randomize(int arr[], int n){
+// Randomly swaps elements in array.
+void randomize(int arr[], int n) {
 	srand(time(NULL));
-	for(int i=n-1;i>0;i--){
-		int j = rand() % (i+1);
+	for(int i = n - 1; i > 0; i--) {
+		int j = rand() % (i + 1);
 		swap(&arr[i], &arr[j]);
-		
 	}
 }
-int main(){
+
+int main() {
+	// Read number of elements.
 	int n;
-	cin>>n;
+	cin >> n;
+
+	// Array for holding values.
 	int A[n];
-	int quickArr[n];
-	for(int i=0;i<n;i++){
-		cin>>A[i];
-	}
+
+	// Read elements into both arrays
 	for(int i = 0; i < n; i++) {
-		quickArr[i] = A[i];
+		cin >> A[i];
 	}
 
-	auto start = high_resolution_clock::now();
-	selectionSort(A,n);
-	auto stop = high_resolution_clock::now();
-	auto duration = duration_cast<microseconds>(stop - start);
-	cout<<"The time for Selection Sort " << duration.count()<<" microseconds\n";
-	randomize(A,n);
-	for(int i=0;i < n; i++){
-		cout<<A[i]<<" ";
-	}
-	cout<<"\n";
-	auto start1 = high_resolution_clock::now();
-	insertionSort(A,n);
-	auto stop1 = high_resolution_clock::now();	
-	auto duration1 = duration_cast<microseconds>(stop1 - start1);	
-	cout<<"The time for Insertion Sort " << duration1.count()<<" microseconds\n";
+	// Selection Sort
+	auto start_ss = high_resolution_clock::now();	// Start time
+	selectionSort(A, n);
+	auto stop_ss = high_resolution_clock::now();	// End time
+	auto duration_ss = duration_cast<microseconds>(stop_ss - start_ss);
+	cout << "The time for Selection Sort " << duration_ss.count() << " microseconds\n";
+
+	// Randomize and print array
+	randomize(A, n);
+	print(A, n);
 	
-	auto start2 = high_resolution_clock::now();
-	bubbleSort(A,n);
-	auto stop2 = high_resolution_clock::now();	
-	auto duration2 = duration_cast<microseconds>(stop2 - start2);	
-	cout<<"The time for Bubble Sort " << duration2.count()<<" microseconds\n";
+	// Insertion Sort
+	auto start_is = high_resolution_clock::now();
+	insertionSort(A, n);
+	auto stop_is = high_resolution_clock::now();	
+	auto duration_is = duration_cast<microseconds>(stop_is - start_is);	
+	cout << "The time for Insertion Sort " << duration1.count() << " microseconds\n";
+	
+	// Randomize and print array
+	randomize(A, n);
+	print(A, n);
 
-	auto start3 = high_resolution_clock::now();
-	quickSort(quickArr,0,n-1);
-	auto stop3 = high_resolution_clock::now();
-	auto duration3 = duration_cast<microseconds>(stop3 - start3);
-	for(int i = 0; i < n; i++) {
-		cout << quickArr[i] << " ";
-		if(i == n-1) {
-			cout << "The time for Quick Sort " << duration3.count();
-			cout << " microseconds\n";
-		}
-	}
+	auto start_bs = high_resolution_clock::now();
+	bubbleSort(A, n);
+	auto stop_bs = high_resolution_clock::now();	
+	auto duration_bs = duration_cast<microseconds>(stop_bs - start_bs);	
+	cout << "The time for Bubble Sort " << duration_bs.count() << " microseconds\n";
+
+	// Randomize and print array
+	randomize(A, n);
+	print(A, n);
+
+	// Quick Sort
+	auto start_qs = high_resolution_clock::now();
+	quickSort(A, 0, n - 1);
+	auto stop_qs = high_resolution_clock::now();
+	auto duration_qs = duration_cast<microseconds>(stop_qs - start_qs);
+	print(A, n);
+	cout << "The time for Quick Sort " << duration_qs.count() << " microseconds\n";
 	
 	return 0;
 } 
